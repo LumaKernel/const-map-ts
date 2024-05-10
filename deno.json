@@ -1,0 +1,9 @@
+{
+  "name": "@luma/const-map",
+  "version": "0.1.0",
+  "exports": "./mod.ts",
+  "tasks": {
+    "check": "deno check **/*.ts",
+    "test": "deno test"
+  }
+}
