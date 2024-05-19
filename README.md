@@ -204,3 +204,8 @@ export const TIME_SECOND = make("second");
 
 The codes of this repository is licensed under the [MIT](https://github.com/LumaKernel/const-map-ts?tab=MIT-2-ov-file) and [CC0](https://github.com/LumaKernel/const-map-ts?tab=CC0-1.0-1-ov-file).
 
+## Contribution
+
+Any kind of contribution, using this library, writing articles, creating issues/PRs are welcome.
+
+Please keep deno.json version unchanged when creating the PRs.

@@ -20,24 +20,43 @@ export type MakeConstMap<
     // ) => FromEntries<Arr>[K];
   ) => EntriesMap<Arr, K>;
 
+/**
+ * Creates a constant map from a constant entry array.
+ * @param definition - A constant entry array.
+ * @returns A constant map factory. This should be called without any arguments to get a constant map.
+ * @example
+ * ```ts
+ * const lookupInteger = makeConstMap(
+ *   [
+ *     ["one", 1],
+ *     ["two", 2],
+ *     ["three", 3],
+ *   ] as const,
+ * )();
+ * const v1 = lookupInteger("one"); // Typed as 1
+ * const v2 = lookupInteger("two"); // Typed as 2
+ * const v3 = lookupInteger("one" as "one" | "three"); // Typed as 1 | 3
+ * ```
+ */
 export const makeConstMap = <
   ConstMapDefinition extends ReadonlyArray<readonly [string, unknown]>,
 >(
-  arr: ConstMapDefinition,
+  definition: ConstMapDefinition,
 ): MakeConstMap<ConstMapDefinition> => {
   const init = () => {
-    const vars = Array.from({ length: arr.length }, (_, i) => "v" + i);
+    const vars = Array.from({ length: definition.length }, (_, i) => "v" + i);
     const map = new Function(
       ...vars,
       "E1",
       "E2",
       `return (k)=>{if(typeof k!=='string')throw new E1();switch(k){${
-        arr.map(([k], i) => `case ${JSON.stringify(k)}:return v${i};`).join(
-          "",
-        )
+        definition.map(([k], i) => `case ${JSON.stringify(k)}:return v${i};`)
+          .join(
+            "",
+          )
       }default:throw new E2(k)}}`,
     )(
-      ...arr.map(([, v]) => v),
+      ...definition.map(([, v]) => v),
       ConstMapNotStringKeyError,
       ConstMapUndefinedKeyError,
     );
