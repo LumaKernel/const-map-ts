@@ -137,7 +137,7 @@ See more details on [PERFORMANCE](./PERFORMANCE.md)
 
 You can combine ConstMap and the TypeScript technique branded literal types, which's also referred as nominal typing.
 
-```
+```ts
 import { makeConstMap } from "../mod.ts";
 
 // Assume these branded type definitions are packaged in a specific module
