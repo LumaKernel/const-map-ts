@@ -70,7 +70,6 @@ export const makeConstMap = <
  * This is almost the same as `makeConstMap`, but it allows you to specify the return type of the map.
  * This helps you to get a better completion when editing the values of entries.
  * Note that this should be called immediately after the type parameter supply.
- * @param R - The return type of the map.
  * @param definition - A constant entry array.
  * @example
  * ```ts
