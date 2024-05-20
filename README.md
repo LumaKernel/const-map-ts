@@ -138,7 +138,7 @@ See more details on [PERFORMANCE](./PERFORMANCE.md)
 You can combine ConstMap and the TypeScript technique branded literal types, which's also referred as nominal typing.
 
 ```ts
-import { makeConstMap } from "../mod.ts";
+import { makeConstMap } from "@luma/const-map";
 
 // Assume these branded type definitions are packaged in a specific module
 // and are not allowed to be defined elsewhere.
@@ -159,6 +159,28 @@ f("one");
 
 console.log(f(ONE)); // 1
 ```
+
+## Explicit return type support
+
+`makeConstMapWithReturnType` is the variation of `makeConstMap` with support for the expecting return type to be passed as second values of entries.
+This is the feature like `satisfies`-keyword in TypeScript. This helps you editing values of entries with completion, and makes it easier to notice mistakes such as spelling mistakes.
+
+```ts
+import { makeConstMapWithReturnType } from "@luma/const-map";
+
+const lookupInteger = makeConstMapWithReturnType<"A" | "B" | "C">()(
+  [
+    // Completion would work for values!
+    ["one", "A"],
+    ["two", "B"],
+    ["three", "C"],
+  ] as const,
+)();
+
+// Usage is perfectly the same as makeConstMap
+```
+
+Note that, the value got from ConstMap is still narrowest. `lookupInteger('one')` is typed as `"A"`, not as `"A" | "B" | "C"`.
 
 ## Known limitation
 

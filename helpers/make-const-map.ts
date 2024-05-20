@@ -23,7 +23,6 @@ export type MakeConstMap<
 /**
  * Creates a constant map from a constant entry array.
  * @param definition - A constant entry array.
- * @returns A constant map factory. This should be called without any arguments to get a constant map.
  * @example
  * ```ts
  * const lookupInteger = makeConstMap(
@@ -64,4 +63,36 @@ export const makeConstMap = <
   };
   // deno-lint-ignore no-explicit-any
   return init as any;
+};
+
+/**
+ * Creates a constant map from a constant entry array.
+ * This is almost the same as `makeConstMap`, but it allows you to specify the return type of the map.
+ * This helps you to get a better completion when editing the values of entries.
+ * Note that this should be called immediately after the type parameter supply.
+ * @param R - The return type of the map.
+ * @param definition - A constant entry array.
+ * @example
+ * ```ts
+ * const lookupInteger = makeConstMapWithReturnType<'A' | 'B' | 'C'>()(
+ *   [
+ *     ["one", 'A'],
+ *     ["two", 'B'],
+ *     ["three", 'C'],
+ *   ] as const,
+ * )();
+ * const v1 = lookupInteger("one"); // Typed as 'A'
+ * const v2 = lookupInteger("two"); // Typed as 'B'
+ * const v3 = lookupInteger("one" as "one" | "three"); // Typed as 'A' | 'C'
+ * ```
+ */
+export const makeConstMapWithReturnType = <
+  R = unknown,
+>() =>
+<
+  ConstMapDefinition extends ReadonlyArray<readonly [string, R]>,
+>(
+  definition: ConstMapDefinition,
+): MakeConstMap<ConstMapDefinition> => {
+  return makeConstMap(definition);
 };

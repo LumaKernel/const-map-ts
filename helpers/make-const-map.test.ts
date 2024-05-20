@@ -5,7 +5,7 @@ import {
   assertType,
   type IsExact,
 } from "../dev_deps.ts";
-import { makeConstMap } from "./make-const-map.ts";
+import { makeConstMap, makeConstMapWithReturnType } from "./make-const-map.ts";
 import type { ConstMapStaticError } from "./types/const-map-static-error.ts";
 
 Deno.test("makeConstMap: basic case", () => {
@@ -136,7 +136,29 @@ Deno.test("makeConstMap: static: not unique", () => {
   >(true);
 });
 
-Deno.test("makeConstMap: static nagative: not const tuple", () => {
+Deno.test("makeConstMapWithReturnType: basic case", () => {
+  const lookupInteger = makeConstMapWithReturnType<"A" | "B" | "C">()(
+    [
+      ["one", "A"],
+      ["two", "B"],
+      ["three", "C"],
+    ] as const,
+  )();
+
+  const v1 = lookupInteger("one");
+  assertType<IsExact<typeof v1, "A">>(true);
+  assertEquals(v1, "A");
+
+  const v2 = lookupInteger("two");
+  assertType<IsExact<typeof v2, "B">>(true);
+  assertEquals(v2, "B");
+
+  const v3 = lookupInteger("one" as "one" | "three");
+  assertType<IsExact<typeof v3, "A" | "C">>(true);
+  assertEquals(v3, "A");
+});
+
+Deno.test("makeConstMap: static negative: not const tuple", () => {
   // @ts-expect-error
   makeConstMap(
     [
