@@ -1,6 +1,6 @@
 # ConstMap
 
-**ConstMap** is a TypeScript library that enables you to define constant mappings from strings to any kind of value in a type-safe way.
+**ConstMap** is a TypeScript library that enables you to define constant mappings from strings to any kind of value in a type-happy way.
 
 ## Install (npm)
 
